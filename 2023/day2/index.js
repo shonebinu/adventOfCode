@@ -1,6 +1,8 @@
 const fs = require('fs');
 
-function part1(file) {
+function part1(file, limRed, limGreen, limBlue) {
+    let sumId = 0;
+
     const lines = fs.readFileSync(file, 'utf-8').trim().split('\n');
 
     for (let i = 0; i < lines.length; i++) {
@@ -29,7 +31,14 @@ function part1(file) {
         })
     });
 
-    console.log(colors)
+    for (let i = 0; i < colors.length; i++) {
+        if (colors[i]["red"] <= limRed &&
+            colors[i]["green"] <= limGreen &&
+            colors[i]["blue"] <= limBlue)
+            sumId += i+1;
+    }
+
+    console.log(sumId)
 }
 
-part1('./example.txt');
+part1('./example.txt', 12, 13, 14);
