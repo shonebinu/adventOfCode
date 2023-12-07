@@ -18,6 +18,8 @@ function part1(file, limRed, limGreen, limBlue) {
     lines.forEach(line => {
         let red = 0, green = 0, blue = 0;
 
+        // again divide the result or something by creating nested objects, otherwise it might be difficult
+        
         for (let i = 0; i < line.length; i++) {
             if (line[i].includes('red')) 
                 red += Number(line[i].at(line[i].indexOf('red') - 2))
@@ -26,6 +28,7 @@ function part1(file, limRed, limGreen, limBlue) {
             if (line[i].includes('blue'))
                 blue += Number(line[i].at(line[i].indexOf('blue') - 2))
         }
+
         colors.push({
             "red": red, "green": green, "blue": blue
         })
@@ -38,7 +41,7 @@ function part1(file, limRed, limGreen, limBlue) {
             sumId += i+1;
     }
 
-    console.log(sumId)
+    console.log(sumId);
 }
 
-part1('./example.txt', 12, 13, 14);
+part1('./input.txt', 12, 13, 14);
