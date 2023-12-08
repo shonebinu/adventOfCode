@@ -42,7 +42,7 @@ function part1(file, limRed, limGreen, limBlue) {
 function part2(file) {
     function updateMaxValues(input) {
         Object.keys(input).forEach((color) => {
-            temp[color] = Math.max(temp[color] || 0, parseInt(input[color]))
+            temp[color] = Math.max(parseInt(temp[color]), parseInt(input[color]))
         })
     }
 
