@@ -1,47 +1,40 @@
 const fs = require('fs');
 
 function part1(file, limRed, limGreen, limBlue) {
-    let sumId = 0;
 
     const lines = fs.readFileSync(file, 'utf-8').trim().split('\n');
 
-    for (let i = 0; i < lines.length; i++) {
-        lines[i] = lines[i].split(':')[1].trim()
-                    .split(';');
-     
-        for (let j = 0; j < lines[i].length; j++)
-            lines[i][j] = lines[i][j].trim();
+    const limit = {
+        red: limRed,
+        green: limGreen,
+        blue: limBlue,
     }
 
-    const colors = [];
+    const games = [];
 
     lines.forEach(line => {
-        let red = 0, green = 0, blue = 0;
+        games.push(line.split(': ')[1].split('; '));
+    })
 
-        // again divide the result or something by creating nested objects, otherwise it might be difficult
-        
-        for (let i = 0; i < line.length; i++) {
-            if (line[i].includes('red')) 
-                red += Number(line[i].at(line[i].indexOf('red') - 2))
-            if (line[i].includes('green'))
-                green += Number(line[i].at(line[i].indexOf('green') - 2))
-            if (line[i].includes('blue'))
-                blue += Number(line[i].at(line[i].indexOf('blue') - 2))
-        }
+    const notPossible = new Set();
 
-        colors.push({
-            "red": red, "green": green, "blue": blue
+    games.forEach((game, index) => {
+        game.forEach(set => {
+            set.split(', ').forEach(col => {
+                let [num, color] = col.split(' ');
+                if (num > limit[color]) 
+                    notPossible.add(index+1);
+            })
         })
-    });
+    })
 
-    for (let i = 0; i < colors.length; i++) {
-        if (colors[i]["red"] <= limRed &&
-            colors[i]["green"] <= limGreen &&
-            colors[i]["blue"] <= limBlue)
-            sumId += i+1;
+    let sumId = 0;
+
+    for (let i = 1; i <= lines.length; i++) {
+        if (!notPossible.has(i)) sumId += i;
     }
 
-    console.log(sumId);
+    console.log(sumId)
 }
 
 part1('./input.txt', 12, 13, 14);
