@@ -2,7 +2,7 @@ const fs = require('fs')
 
 let lines = fs.readFileSync('example.txt', 'utf-8').trim().split('\n')
 
-const seeds = lines[0].split(': ')[1].split(' ').map(Number)
+let seeds = lines[0].split(': ')[1].split(' ').map(Number)
 
 lines = lines.splice(2, lines.length - 2)
 
@@ -38,3 +38,18 @@ for (i+=2; lines[i] != ''; i++)
 for (i+=2; i < lines.length; i++)
   humToLoc.push(lines[i].split(' ').map(Number))
 
+let soils = []
+
+seeds.forEach((seed, i) => {
+  seedToSoil.forEach((map, j) => {
+    if (seed >= map[1] && seed < map[1]+map[2]) {
+      let diff = seed - map[1]
+      soils.push(diff + map[0])
+      seeds.splice(seeds.splice(seeds.indexOf(seed), 1))
+    }
+  })
+})
+
+soils = soils.concat(seeds)
+
+console.log(soils)
