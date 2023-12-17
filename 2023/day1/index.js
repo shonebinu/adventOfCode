@@ -78,4 +78,4 @@ function part2(file) {
 
 
 //part1('./example.txt');
-part2('./input.txt');
+part2('./example.txt');
