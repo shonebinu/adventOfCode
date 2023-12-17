@@ -1,10 +1,8 @@
 const fs = require('fs')
 
-let lines = fs.readFileSync('example.txt', 'utf-8').trim().split('\n')
+let lines = fs.readFileSync('input.txt', 'utf-8').trim().split('\n')
 
-let seeds = lines[0].split(': ')[1].split(' ').map(Number)
-
-lines = lines.splice(2, lines.length - 2)
+let map = lines[0].split(': ')[1].split(' ').map(Number)
 
 const seedToSoil = []
 const soilToFert = []
@@ -14,42 +12,44 @@ const lightToTemp = []
 const tempToHumid = []
 const humToLoc = []
 
+let i = 1
 
-let i = 0
+function filter(array) {
+  for (i+=2; lines[i] != '' && i < lines.length; i++)
+    array.push(lines[i].split(' ').map(Number))
+}
 
-for (i+=1 ;lines[i] != ''; i++)
-  seedToSoil.push(lines[i].split(' ').map(Number))
+filter(seedToSoil)
+filter(soilToFert)
+filter(fertToWat)
+filter(watToLight)
+filter(lightToTemp)
+filter(tempToHumid)
+filter(humToLoc)
 
-for (i+=2; lines[i] != ''; i++)
-  soilToFert.push(lines[i].split(' ').map(Number))
 
-for (i+=2; lines[i] != ''; i++)
-  fertToWat.push(lines[i].split(' ').map(Number))
-
-for (i+=2; lines[i] != ''; i++)
-  watToLight.push(lines[i].split(' ').map(Number))
-
-for (i+=2; lines[i] != ''; i++)
-  lightToTemp.push(lines[i].split(' ').map(Number))
-
-for (i+=2; lines[i] != ''; i++)
-  tempToHumid.push(lines[i].split(' ').map(Number))
-
-for (i+=2; i < lines.length; i++)
-  humToLoc.push(lines[i].split(' ').map(Number))
-
-let soils = []
-
-seeds.forEach((seed, i) => {
-  seedToSoil.forEach((map, j) => {
-    if (seed >= map[1] && seed < map[1]+map[2]) {
-      let diff = seed - map[1]
-      soils.push(diff + map[0])
-      seeds.splice(seeds.splice(seeds.indexOf(seed), 1))
-    }
+function mapping(map, array) {
+  map.forEach(x => {
+    array.forEach(y => {
+      if (x >= y[1] && x < y[1]+y[2]) 
+        map.splice(map.indexOf(x), 1, y[0] + x - y[1])
+    })
   })
+}
+
+mapping(map, seedToSoil)
+mapping(map, soilToFert)
+mapping(map, fertToWat)
+mapping(map, watToLight)
+mapping(map, lightToTemp)
+mapping(map, tempToHumid)
+mapping(map, humToLoc)
+
+let smallest = Infinity
+
+map.forEach(x => {
+  if (x < smallest)
+    smallest = x
 })
 
-soils = soils.concat(seeds)
-
-console.log(soils)
+console.log(smallest)
